@@ -1,7 +1,3 @@
-#Maestro
-
-##Spec for Monitor
-```ruby
 actions = <<-eos
   exists do
     text_field.where("id": "name").set("john")
@@ -20,20 +16,3 @@ monitor = {
 }
 
 ragios.create(monitor)
-```
-
-
-##Spec for transactions
-```ruby
-exists do
-  title.where("text": "obiora")
-end
-
-exists do
-  link.where("id": "aboutus").click
-end
-
-exists do
-  text_field.where("id": "name").set("john")
-end
-```
