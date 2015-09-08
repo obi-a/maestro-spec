@@ -1,6 +1,7 @@
 #Maestro
+Improved DSL for the Website Transaction Monitor here: https://github.com/obi-a/uptime_monitor
 
-##Spec for Monitor
+##Usage:
 ```ruby
 actions = <<-eos
   exists do
