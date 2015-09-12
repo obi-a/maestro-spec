@@ -104,14 +104,14 @@ option.where(value: "Milk")
 A text validation is used to verify that the text content of a html element hasn't changed. For example,
 ```ruby
 exists do
-  title.where(text: "welcome")
+  title.with_text("welcome")
 end
 
 ```
 The above example first verifies that a title tag exists on the page, then it verifies that title tag text is equal to "Welcome to my site".
 The following is a text validation:
 ```ruby
-text.where(text: "Welcome to my site")
+text.with_text("Welcome to my site")
 ```
 Text validations can also verify that the html element's text includes the provided string, in the format below:
 ```ruby
@@ -213,7 +213,7 @@ Example, to monitor the keyword search feature on my blog, notice the validation
 #new DSL
 actions = <<-eos
   exists do
-    title.where(text: "Obi Akubue")
+    title.with_text("Obi Akubue")
     text_field.where(id: "s").set("ruby")
     button.where(id: "searchsubmit").click
     title.includes_text("ruby").includes_text("Search Results")
@@ -270,14 +270,14 @@ This transaction verifies the the following about the site:
 #new DSL
 actions = <<-eos
   exists do
-    title.text("All Watches Shop, Authentic Watches at Akross")
+    title.with_text("All Watches Shop, Authentic Watches at Akross")
     text_field.where(name: "filter_name").set("citizen")
     div.where(class: "button-search").click
-    title.text("search")
+    title.with_text("search")
     link.where(text: "search")
     button.where(value: "Add to Cart").click
     link.where(text: "Checkout").click
-    title.text("Checkout")
+    title.with_text("Checkout")
   end
 eos
 
@@ -323,13 +323,13 @@ Another example, to monitor the login process of the website http://southmunn.co
 #new DSL
 actions = <<-eos
   exists do
-    title.text("Website Uptime Monitoring | SouthMunn.com")
+    title.with_text("Website Uptime Monitoring | SouthMunn.com")
     link.where(text: "login").click
-    title.text("Sign in - Website Uptime Monitoring | SouthMunn.com")
+    title.with_text("Sign in - Website Uptime Monitoring | SouthMunn.com")
     text_field.where(id: "username").set("admin")
     text_field.where(id: "password").set("pass")
     button.click
-    title.text("Dashboard - Website Uptime Monitoring | SouthMunn.com")
+    title.with_text("Dashboard - Website Uptime Monitoring | SouthMunn.com")
   end
 eos
 
@@ -357,18 +357,4 @@ monitor = {
   browser: ["firefox", headless: true]
 }
 ragios.create(monitor)
-```
-
-```ruby
-exists do
-  title.where("text": "obiora")
-end
-
-exists do
-  link.where("id": "aboutus").click
-end
-
-exists do
-  text_field.where("id": "name").set("john")
-end
 ```
