@@ -1,0 +1,27 @@
+grammar Maestro
+
+  rule exists_block
+    (space)? 'exists' space 'do' space expression+ space "end" (space)?
+  end
+
+  rule expression
+    html_element
+  end
+
+  rule html_element
+    word number
+  end
+
+  rule word
+    [A-Za-z]+
+  end
+
+  rule number
+    ([0-9]+)?
+  end
+
+  rule space
+    [\s]+
+  end
+end
+
