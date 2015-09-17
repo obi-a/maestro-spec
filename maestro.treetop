@@ -1,11 +1,11 @@
 grammar Maestro
 
   rule exists_block
-    (space)? 'exists' space 'do' space expression+ space "end" (space)?
+    (space)? 'exists' space 'do' (expression)+ 'end' (space)?
   end
 
   rule expression
-    html_element
+    (&space)+ html_element (&space)+
   end
 
   rule html_element
