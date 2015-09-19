@@ -8,12 +8,18 @@ actions = <<-eos
   exists do
     h1
     div
+    hoj
   end
 eos
 
 #actions = "  exists do div end"
 
-#actions = "h1"
+actions = <<-eos
+  exists do
+    div.where(id: "test", class: "test-sectionn" )
+    element.where(css: "[data-brand='toyota']")
+  end
+eos
 
 #syntax_tree = parser.parse( actions.gsub(/\n|\t/, "") )
 
@@ -28,7 +34,7 @@ def parse(data)
   ast = parser.parse data
 
   if ast
-    ast.do_something_useful
+    puts ast.inspect
   else
     parser.failure_reason =~ /^(Expected .+) after/m
     puts "#{$1.gsub("\n", '$NEWLINE')}:"

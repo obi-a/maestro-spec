@@ -60,7 +60,7 @@ end
 
 #<div data-brand="toyota">
 exists do
-  element.where(css: '[data-brand="toyota"]')
+  element.where(css: "[data-brand='toyota']")
 end
 
 ##Helper for HTML elements

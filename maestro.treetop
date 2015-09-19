@@ -1,15 +1,43 @@
 grammar Maestro
 
-  rule exists_block
-    (space)? 'exists' space 'do' (expression)? (space)+ 'end' (space)?
+  rule body
+    (exists_do / end_exists / validation / html_element / space)*
   end
 
-  rule expression
-    (&space)+ html_element
+  rule exists_do
+    "exists" space "do"
+  end
+
+  rule end_exists
+    "end"
+  end
+
+  rule validation
+    html_element ".where" hash space?
+  end
+
+  rule hash
+    '(' hash_contents+ ')'
+  end
+
+  rule hash_contents
+    key_value_pair space? ','? space?
+  end
+
+  rule key_value_pair
+    space? identifier space? ":" space? string space?
   end
 
   rule html_element
     word number
+  end
+
+  rule identifier
+    word number
+  end
+
+  rule string
+    '"' (!'"' . / '\"')* '"'
   end
 
   rule word
