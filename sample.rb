@@ -15,11 +15,13 @@ eos
 #actions = "  exists do div end"
 
 actions = <<-eos
-  exists do
-    div.where(id: "test", class: "test-sectionn" )
-    element.where(css: "[data-brand='toyota']")
+  wait_until_exits do
+    div.where(id: "open-section")
   end
 eos
+
+#actions = ' "o" '
+#puts actions.inspect
 
 #syntax_tree = parser.parse( actions.gsub(/\n|\t/, "") )
 

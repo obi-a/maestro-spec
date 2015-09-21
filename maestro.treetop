@@ -1,7 +1,7 @@
 grammar Maestro
 
   rule body
-    (exists_do / end_exists / validation / html_element / space)*
+    (exists_do / end_exists / text_validation / element_validation / html_element / space)*
   end
 
   rule exists_do
@@ -12,8 +12,26 @@ grammar Maestro
     "end"
   end
 
-  rule validation
+  rule wait_until_exists
+    "wait_until_exits" space "do" space
+    (text_validation / element_validation / html_element)
+    space "end" space?
+  end
+
+  rule text_validation
+    (element_validation / html_element) check_func+
+  end
+
+  rule element_validation
     html_element ".where" hash space?
+  end
+
+  rule check_func
+    "." (("with_text" / "includes_text" / "set" / "select") string_params / "click")
+  end
+
+  rule string_params
+    '(' string ')'
   end
 
   rule hash
@@ -41,7 +59,7 @@ grammar Maestro
   end
 
   rule word
-    [A-Za-z]+
+    [A-Za-z_]+
   end
 
   rule number
