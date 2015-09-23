@@ -1,59 +1,146 @@
 grammar Maestro
 
   rule body
-    (exists_do / end_exists / wait_until_exists / text_validation / element_validation / html_element / space)*
-  end
-
-  rule exists_do
-    "exists" space "do"
-  end
-
-  rule end_exists
-    "end"
+    ( wait_until_exists / end_exists / validations_and_actions / element_validation / html_element / space)* {
+      def content
+        elements.map { |e| e.content }.compact
+      end
+    }
   end
 
   rule wait_until_exists
-    "wait_until_exists" space "do"
+    "wait_until_exists" space "do" {
+      def content
+      end
+    }
   end
 
-  rule text_validation
-    (element_validation / html_element) check_func+
+  rule end_exists
+    "end" {
+      def content
+      end
+    }
+  end
+
+  rule validations_and_actions
+    (element_validation / html_element) check_func+ {
+      def content
+        container = [elements.first.content]
+        elements.last.elements.each do |e|
+          container << e.content
+        end
+        container
+      end
+    }
   end
 
   rule element_validation
-    html_element ".where" hash space?
+    html_element ".where" hash space? {
+      def content
+        {html_element.content => hash.content }
+      end
+    }
   end
 
   rule check_func
-    "." (("with_text" / "includes_text" / "set" / "select") string_params / "click")
+    "." (reserved_with_string / click ) {
+      def content
+        elements[1].content
+      end
+    }
+  end
+
+  rule click
+    "click" {
+      def content
+        [:click]
+      end
+    }
+  end
+
+  rule reserved_with_string
+    reserved_functions string_params  {
+      def content
+        [{reserved_functions.content => string_params.content }]
+      end
+    }
+  end
+
+  rule reserved_functions
+    ("with_text" / "includes_text" / "set" / "select") {
+      def content
+        case text_value
+        when "with_text"
+          :text
+        when "includes_text"
+          :includes_text
+        when "set"
+          :set
+        when "select"
+          :select
+        end
+      end
+    }
   end
 
   rule string_params
-    '(' string ')'
+    '(' string ')' {
+      def content
+        string.content
+      end
+    }
   end
 
   rule hash
-    '(' hash_contents+ ')'
+    '(' hash_contents+ ')' {
+      def content
+        hash = {}
+        elements[1].elements.each do |e|
+          hash.merge!(e.content)
+        end
+        hash
+      end
+    }
   end
 
   rule hash_contents
-    key_value_pair space? ','? space?
+    key_value_pair space? ','? space? {
+      def content
+        key_value_pair.content
+      end
+    }
   end
 
   rule key_value_pair
-    space? identifier space? ":" space? string space?
+    space? identifier space? ":" space? string space? {
+      def content
+        {identifier.content => string.content }
+      end
+    }
   end
 
   rule html_element
-    word number
+    word number {
+      def content
+        text_value.to_sym
+      end
+    }
   end
 
   rule identifier
-    word number
+    word number {
+      def content
+        text_value.to_sym
+      end
+    }
   end
 
   rule string
-    '"' (!'"' . / '\"')* '"'
+    '"' (!'"' . / '\"')* '"' {
+      def content
+        eval text_value
+      end
+    }
   end
 
   rule word
@@ -65,6 +152,9 @@ grammar Maestro
   end
 
   rule space
-    [\s]+
+    [\s]+ {
+      def content
+      end
+    }
   end
 end

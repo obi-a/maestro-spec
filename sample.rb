@@ -15,12 +15,10 @@ eos
 #actions = "  exists do div end"
 
 actions = <<-eos
-  wait_until_exits do
-    div.where(id: "open-section")
-  end
+  title.includes_text("ruby").includes_text("Search Results")
 eos
 
-#actions = ' "o" '
+
 #puts actions.inspect
 
 #syntax_tree = parser.parse( actions.gsub(/\n|\t/, "") )
@@ -36,7 +34,7 @@ def parse(data)
   ast = parser.parse data
 
   if ast
-    puts ast.inspect
+    puts ast.content.inspect
   else
     parser.failure_reason =~ /^(Expected .+) after/m
     puts "#{$1.gsub("\n", '$NEWLINE')}:"
