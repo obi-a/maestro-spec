@@ -15,7 +15,7 @@ eos
 #actions = "  exists do div end"
 
 actions = <<-eos
-  title.includes_text("ruby").includes_text("Search Results")
+  wait_for div.where(id: "open-section")
 eos
 
 

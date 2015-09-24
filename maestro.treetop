@@ -1,23 +1,25 @@
 grammar Maestro
 
   rule body
-    ( wait_until_exists / end_exists / validations_and_actions / element_validation / html_element / space)* {
+    ( waiting  / validations_and_actions / element_validation / html_element / space)* {
       def content
         elements.map { |e| e.content }.compact
       end
     }
   end
 
-  rule wait_until_exists
-    "wait_until_exists" space "do" {
+  rule waiting
+    space? "wait_for" page_content  {
       def content
+        [{:wait_until_exists? => [page_content.content] }]
       end
     }
   end
 
-  rule end_exists
-    "end" {
+  rule page_content
+    space (validations_and_actions / element_validation /  html_element) space? {
       def content
+        elements[1].content
       end
     }
   end
