@@ -4,9 +4,7 @@ Improved DSL for the Website Transaction Monitor here: https://github.com/obi-a/
 ##Usage:
 ```ruby
 actions = <<-eos
-  exists do
-    text_field.where("id": "name").set("john")
-  end
+  text_field.where("id": "name").set("john")
 eos
 
 monitor = {
@@ -27,41 +25,25 @@ ragios.create(monitor)
 ##Spec for transactions
 ```ruby
 ##Validations
-exists do
-  h1
-  div
-end
+h1
+div
 
 ###HTML Elements
-exists do
   h1
   div
   a
   img
   span
-end
-
-exists do
   div.where(class: "box_content")
-end
-
-exists do
   img.where(src: "https://fc03.deviantart.net/fs14/f/2007/047/f/2/Street_Addiction_by_gizmodus.jpg"  )
-end
-
-exists do
   div.where(id: "test", class: "test-sectionn" )
-end
+
 
 ##Using CSS Selectors
-exists do
   element.where(css: "#rss-link")
-end
 
 #<div data-brand="toyota">
-exists do
   element.where(css: "[data-brand='toyota']")
-end
 
 ##Helper for HTML elements
 #links
@@ -103,9 +85,8 @@ option.where(value: "Milk")
 ##Text Validations
 A text validation is used to verify that the text content of a html element hasn't changed. For example,
 ```ruby
-exists do
-  title.with_text("welcome")
-end
+title.with_text("welcome")
+
 
 ```
 The above example first verifies that a title tag exists on the page, then it verifies that title tag text is equal to "Welcome to my site".
@@ -115,16 +96,13 @@ text.with_text("Welcome to my site")
 ```
 Text validations can also verify that the html element's text includes the provided string, in the format below:
 ```ruby
-exists do
-  title.includes_text("Welcome")
-end
+title.includes_text("Welcome")
 ```
 The above example verifies that the title tag's text includes the string "Welcome".
 Another example, to verify that a div with class="box_content" includes the string "SouthMunn is a Website"
 ```ruby
-exists do
-  div.where(class: "box_content").includes_text("SouthMunn is a Website")
-end
+div.where(class: "box_content").includes_text("SouthMunn is a Website")
+
 
 #old DSL
 exists?: [
@@ -136,9 +114,8 @@ Text validations can be used on html elements that can contain text like title, 
 ####Actions
 Validations can also include actions. The actions are performed on the html element after it is verfied that the element exists. Example to set a text field's value
 ```ruby
-exists do
-  text_field.where(id: "username").set("admin")
-end
+text_field.where(id: "username").set("admin")
+
 ```
 The above example will set the text field's value to the string "admin".
 The following is an action
@@ -172,23 +149,19 @@ link.where(text: "Click Here").click
 button.where(id: "submit").click
 ```
 ####Waiting
-For webpages that use a lot of AJAX, it's possible to wait until an element exists, by using the wait_until_exists? key. This key takes an element as value. It is a special type of validation, it will wait for 30 seconds for the provided element to exist, if the element doesn't exist in 30 seconds the validation fails.
+For webpages that use a lot of AJAX, it's possible to wait until an element exists, by using the wait_for. This key takes an element as value. It is a special type of validation, it will wait for 30 seconds for the provided element to exist, if the element doesn't exist in 30 seconds the validation fails.
 ```ruby
-wait_until_exits do
-  div.where(id: "open-section")
-end
+wait_for div.where(id: "open-section")
 ```
 The above example will wait 30 seconds until the div exists, if it doesn't exist after 30 seconds the validation will fail.
 
 ####Multiple validations and actions
 ```ruby
 #new DSL
-exists do
-  text_field.where(id: "username").set("admin")
-  text_field.where(id: "password").set("pass")
-  button.click
-  title.includes_text("Dashboard")
-end
+text_field.where(id: "username").set("admin")
+text_field.where(id: "password").set("pass")
+button.click
+title.includes_text("Dashboard")
 
 #old DSL
 exists?: [
@@ -212,13 +185,11 @@ Example, to monitor the keyword search feature on my blog, notice the validation
 ```ruby
 #new DSL
 actions = <<-eos
-  exists do
-    title.with_text("Obi Akubue")
-    text_field.where(id: "s").set("ruby")
-    button.where(id: "searchsubmit").click
-    title.includes_text("ruby").includes_text("Search Results")
-    h2.where(class: "pagetitle").includes_text("Search results for")
-  end
+  title.with_text("Obi Akubue")
+  text_field.where(id: "s").set("ruby")
+  button.where(id: "searchsubmit").click
+  title.includes_text("ruby").includes_text("Search Results")
+  h2.where(class: "pagetitle").includes_text("Search results for")
 eos
 
 monitor = {
@@ -269,16 +240,14 @@ This transaction verifies the the following about the site:
 ```ruby
 #new DSL
 actions = <<-eos
-  exists do
-    title.with_text("All Watches Shop, Authentic Watches at Akross")
-    text_field.where(name: "filter_name").set("citizen")
-    div.where(class: "button-search").click
-    title.with_text("search")
-    link.where(text: "search")
-    button.where(value: "Add to Cart").click
-    link.where(text: "Checkout").click
-    title.with_text("Checkout")
-  end
+  title.with_text("All Watches Shop, Authentic Watches at Akross")
+  text_field.where(name: "filter_name").set("citizen")
+  div.where(class: "button-search").click
+  title.with_text("search")
+  link.where(text: "search")
+  button.where(value: "Add to Cart").click
+  link.where(text: "Checkout").click
+  title.with_text("Checkout")
 eos
 
 monitor = {
@@ -322,15 +291,13 @@ Another example, to monitor the login process of the website http://southmunn.co
 ```ruby
 #new DSL
 actions = <<-eos
-  exists do
-    title.with_text("Website Uptime Monitoring | SouthMunn.com")
-    link.where(text: "login").click
-    title.with_text("Sign in - Website Uptime Monitoring | SouthMunn.com")
-    text_field.where(id: "username").set("admin")
-    text_field.where(id: "password").set("pass")
-    button.click
-    title.with_text("Dashboard - Website Uptime Monitoring | SouthMunn.com")
-  end
+  title.with_text("Website Uptime Monitoring | SouthMunn.com")
+  link.where(text: "login").click
+  title.with_text("Sign in - Website Uptime Monitoring | SouthMunn.com")
+  text_field.where(id: "username").set("admin")
+  text_field.where(id: "password").set("pass")
+  button.click
+  title.with_text("Dashboard - Website Uptime Monitoring | SouthMunn.com")
 eos
 
 login_process = Hercules::Parser.parse(actions)
