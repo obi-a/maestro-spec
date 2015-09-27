@@ -1,6 +1,6 @@
 require 'treetop'
 
-Treetop.load 'maestro'
+Treetop.load 'browsers'
 
 #parser = MaestroParser.new
 
@@ -15,10 +15,17 @@ eos
 #actions = "  exists do div end"
 
 actions = <<-eos
-  wait_for div.where(id: "open-section")
+  title.with_text("All Watches Shop, Authentic Watches at Akross")
+  text_field.where(name: "filter_name").set("citizen")
+  div.where(class: "button-search").click
+  title.with_text("search")
+  link.where(text: "search")
+  button.where(value: "Add to Cart").click
+  link.where(text: "Checkout").click
+  title.with_text("Checkout")
 eos
 
-
+actions = "firefox    headless "
 #puts actions.inspect
 
 #syntax_tree = parser.parse( actions.gsub(/\n|\t/, "") )
@@ -30,7 +37,7 @@ def parse(data)
     data = data.read
   end
 
-  parser = MaestroParser.new
+  parser = BrowsersParser.new
   ast = parser.parse data
 
   if ast

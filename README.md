@@ -3,7 +3,7 @@ Improved DSL for the Website Transaction Monitor here: https://github.com/obi-a/
 
 ##Usage:
 ```ruby
-actions = <<-eos
+validations = <<-eos
   text_field.where("id": "name").set("john")
 eos
 
@@ -14,13 +14,31 @@ monitor = {
   contact: "admin@obiora.com",
   via: "gmail_notifier",
   plugin: "uptime_monitor",
-  exists?: Hercules::Parser.parse(actions),
+  exists?: validations,
   browser: ["firefox"]
 }
 
 ragios.create(monitor)
 ```
 
+###Spec For Browsers
+A browser is specified, by adding a browser key/value pair to the monitor
+```ruby
+browser: "firefox"
+```
+Supported browsers include Firefox, Chrome, Safari and Phantomjs. Other browsers can be specified as
+```ruby
+browser: "chrome"
+browser: "safari"
+browser: "phantomjs"
+```
+uptime_monitor uses [Watir Webdriver](http://watirwebdriver.com), firefox runs out of the box with no configuration required. To use Chrome or Safari see the Watir Webdriver documentation on downloading the appropriate driver binary and configuration.
+
+By default, the browsers don't run headless, to run the browser headless, you can specify it in the format below:
+```ruby
+browser: "firefox headless"
+```
+This will run firefox as a headless browser. You should have [Xvfb](https://en.wikipedia.org/wiki/Xvfb) installed to run a non-headless browsers as headless. Headless browsers like Phantomjs don't require Xvfb.
 
 ##Spec for transactions
 ```ruby
@@ -199,7 +217,7 @@ monitor = {
   contact: "admin@obiora.com",
   via: "gmail_notifier",
   plugin: "uptime_monitor",
-  exists?: Hercules::Parser.parse(actions),
+  exists?: actions,
   browser: ["firefox"]
 }
 
@@ -257,7 +275,7 @@ monitor = {
   contact: "admin@obiora.com",
   via: "ses",
   plugin: "uptime_monitor",
-  exists?: Hercules::Parser.parse(actions),
+  exists?: actions,
   browser: ["phantomjs"]
 }
 
