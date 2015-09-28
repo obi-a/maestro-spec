@@ -1,6 +1,6 @@
 require 'treetop'
 
-Treetop.load 'browsers'
+Treetop.load 'maestro'
 
 #parser = MaestroParser.new
 
@@ -25,7 +25,7 @@ actions = <<-eos
   title.with_text("Checkout")
 eos
 
-actions = "firefox    headless "
+#actions = ' wait_for div.where(id: "open-section") '
 #puts actions.inspect
 
 #syntax_tree = parser.parse( actions.gsub(/\n|\t/, "") )
@@ -37,11 +37,11 @@ def parse(data)
     data = data.read
   end
 
-  parser = BrowsersParser.new
+  parser = MaestroParser.new
   ast = parser.parse data
 
   if ast
-    puts ast.content.inspect
+    puts ast.description.inspect
   else
     parser.failure_reason =~ /^(Expected .+) after/m
     puts "#{$1.gsub("\n", '$NEWLINE')}:"
